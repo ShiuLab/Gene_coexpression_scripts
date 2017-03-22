@@ -24,6 +24,28 @@ aracyc = sys.argv[3] #aracyc, go, or manual annotation
 direc = sys.argv[4] #"/mnt/home/uygunsah/projects/4_Plastid/_June2016_resubmission/PCC_distr/"
 pairs = int(sys.argv[5])
 
+
+#all pairwise-gene pccs
+def calculate_pairwise_PCC(list_of_genes):
+    pcc_path_list = []
+    for combo in combinations(list_of_genes, 2):
+        gen1=list(combo)[0]
+        gen2=list(combo)[1]
+        gen1exp = dict_e[gen1]
+        gen2exp = dict_e[gen2]
+        pcc_path = pearsonr(gen1exp, gen2exp)[0]
+        pcc_path_list.append(pcc_path)
+    return pcc_path_list
+
+#ec function
+def calculate_EC(pcc_list, threshold, ngenes):
+    count = 0
+    for p2 in pcc_list:
+        if p2 > threshold:
+            count = count + 1
+    ec2 = float(count)/float((ngenes*(ngenes-1)/2))
+    return ec2
+    
 # expression dictionary
 expression_open = open(expression, "r")
 line1 = expression_open.readline()
@@ -87,29 +109,15 @@ for bio in dict:
             print bio
             pass
         else:
-            if leng_genez < 500:
-                count2 = 0
-                for combo in combinations(new_list, 2):
-                    gen1=list(combo)[0]
-                    gen2=list(combo)[1]
-                    gen1exp = dict_e[gen1]
-                    gen2exp = dict_e[gen2]
-                    pcc_path = pearsonr(gen1exp, gen2exp)[0]
-                    pcc_path_list.append(pcc_path)
-                    med = median(pcc_path_list)
-                #print bio, "writing"
-                out = open("PCC_distr_%s" % bio, "w")
-                out.write("%s\n%s\n" % (bio, str(med))) # name of pathway and median PCC as header
-                for num in pcc_path_list:
-                    out.write("%s\n" % str(num))
-                out.close()
-                
-                for p2 in pcc_path_list:
-                    if p2 > threshold2:
-                        count2 = count2 + 1
-                leng_genez = len(new_list)
-                ec2 = float(count2)/float((leng_genez*(leng_genez-1)/2))
-                output.write("%s\t%f\n" % (bio, ec2))
+            pcc_path_list = calculate_pairwise_PCC(new_list
+            #print bio, "writing"
+            out = open("PCC_distr_%s" % bio, "w")
+            out.write("%s\n%s\n" % (bio, str(med))) # name of pathway and median PCC as header
+            for num in pcc_path_list:
+                out.write("%s\n" % str(num))
+            out.close()                
+            ec = calculate_EC(pcc_path_list, threshold2,len(new_list))                
+            output.write("%s\t%f\n" % (bio, ec))
 output.close()
                
 
@@ -135,12 +143,6 @@ for a in range(1, 50):
             gen2exprand = dict_e[gen_rand2]
             pcc_rand = pearsonr(gen1exprand, gen2exprand)[0]
             pcc_random.append(pcc_rand)
-        for p2 in pcc_random:
-            if p2 > threshold2:
-                count2_random = count2_random + 1
-        leng_genez = len(rand_gen_list)
-        ec2_random = float(count2_random)/float((leng_genez*(leng_genez-1)/2))
-        #print ec2_random
-        ec2.append(ec2_random)
-        output.write("%i\t%f\n" % (sayi, ec2_random))
+        ec_random = calculate_EC(pcc_random, threshold2,len(rand_gen_list)) 
+        output.write("%i\t%f\n" % (sayi, ec_random))
 output.close()
