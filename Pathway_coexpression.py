@@ -109,10 +109,10 @@ for bio in dict:
             print bio
             pass
         else:
-            pcc_path_list = calculate_pairwise_PCC(new_list
+            pcc_path_list = calculate_pairwise_PCC(new_list)
             #print bio, "writing"
             out = open("PCC_distr_%s" % bio, "w")
-            out.write("%s\n%s\n" % (bio, str(med))) # name of pathway and median PCC as header
+            #out.write("%s\n%s\n" % (bio, str(med))) # name of pathway and median PCC as header
             for num in pcc_path_list:
                 out.write("%s\n" % str(num))
             out.close()                
@@ -130,19 +130,13 @@ for a in range(1, 50):
         pcc_random = []
         count2_random = 0
         for fcv in range(1, sayi+1):
-            rand1 = random.choice(all_pathway_genes)
+            rand1 = random.choice(gen_list)
             if rand1 in rand_gen_list:
-                rand1 = random.choice(all_pathway_genes)
+                rand1 = random.choice(gen_list)
                 rand_gen_list.append(rand1)
             else:
                 rand_gen_list.append(rand1)
-        for combo2 in combinations(rand_gen_list, 2):
-            gen_rand1=list(combo2)[0]
-            gen_rand2=list(combo2)[1]
-            gen1exprand = dict_e[gen_rand1]
-            gen2exprand = dict_e[gen_rand2]
-            pcc_rand = pearsonr(gen1exprand, gen2exprand)[0]
-            pcc_random.append(pcc_rand)
+        pcc_random = calculate_pairwise_PCC(rand_gen_list)
         ec_random = calculate_EC(pcc_random, threshold2,len(rand_gen_list)) 
         output.write("%i\t%f\n" % (sayi, ec_random))
 output.close()
