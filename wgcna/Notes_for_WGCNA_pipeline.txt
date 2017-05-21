@@ -3,41 +3,41 @@ Codes and pipeline from Dr Kevin Childs MSU, used in this project
 
 1. Log2 transform the expression matrix if necessary.
 
-/home/kchilds/scripts/systems_biology/log_transform_GSE_matrix.pl   -i input_file -o output_file
+log_transform_GSE_matrix.pl   -i input_file -o output_file
 
 2. Perform coefficient of variation (CV) filtering of the expression matrix.
 
-/home/kchilds/scripts/systems_biology/coefficient_of_variation_filtering_simple.pl  -i input_file  -o output_file  -c cov_low_end_cutoff 
+coefficient_of_variation_filtering_simple.pl  -i input_file  -o output_file  -c cov_low_end_cutoff 
 
 3. Examine the *chip_tree.pdf file to determine if any samples are completely incongruous with the bulk of the expression samples.  If necessary, remove the troublesome chips/samples and regenerate the expression matrix (Go back to just before step 1). 
 
-R --slave --args CV_FILTERED_FPKM_FILE  OUTPUT_FILE_PREFIX /PATH/FOR/INPUT/AND/OUTPUT/FILES/ < /home/kchilds/scripts/systems_biology/wgcna_initial_sample_clustering_simple_parameters.R
+R --slave --args CV_FILTERED_FPKM_FILE  OUTPUT_FILE_PREFIX /PATH/FOR/INPUT/AND/OUTPUT/FILES/ < wgcna_initial_sample_clustering_simple_parameters.R
 
 4. Examine the resulting *_pick_soft_threshold_.pdf graph to determine an appropriate threshold.
 
-R --slave --args INPUT_RDATA_FILE(XXXX-dataInput.RData) OUTPUT_FILE_PREFIX  /PATH/FOR/INPUT/AND/OUTPUT/FILES/ < /home/kchilds/scripts/systems_biology/wgcna_pick_threshold_power_simple_parameters.R
+R --slave --args INPUT_RDATA_FILE(XXXX-dataInput.RData) OUTPUT_FILE_PREFIX  /PATH/FOR/INPUT/AND/OUTPUT/FILES/ < systems_biology/wgcna_pick_threshold_power_simple_parameters.R
 
 5. Examine the resulting heatmaps (*all_by_all_network_heatmap_1000_random_genes.pdf).
 
-R --slave --args INPUT_RDATA_FILE(XXXX-threshold_data.RData)  OUTPUT_FILE_PREFIX  BETA_VALUE  TREECUT_VALUE SIGNED_OR_UNSIGNED_CORRELATION_ANALYSIS(signed or unsigned) /PATH/FOR/INPUT/AND/OUTPUT/FILES/  < /home/kchilds/scripts/systems_biology/wgcna_create_and_plot_modules_simple_paramemters.R
+R --slave --args INPUT_RDATA_FILE(XXXX-threshold_data.RData)  OUTPUT_FILE_PREFIX  BETA_VALUE  TREECUT_VALUE SIGNED_OR_UNSIGNED_CORRELATION_ANALYSIS(signed or unsigned) /PATH/FOR/INPUT/AND/OUTPUT/FILES/  < wgcna_create_and_plot_modules_simple_paramemters.R
 
 6. A directory is created and filled with module-specific files that list gene identifiers.
 
-R --slave --args  potato_biotic_stress_fpkm_transformed_cv_0.4_10_0.7-networkConstruction-auto.RData  potato_biotic_stress_fpkm_transformed_cv_0.4_10_0.7  /data/potato/encyclopedia/  <  /home/kchilds/scripts/systems_biology/wgcna_extract_module_data_simple_parameters.R
+R --slave --args  potato_biotic_stress_fpkm_transformed_cv_0.4_10_0.7-networkConstruction-auto.RData  potato_biotic_stress_fpkm_transformed_cv_0.4_10_0.7  /data/potato/encyclopedia/  <  wgcna_extract_module_data_simple_parameters.R
 
 7. Expression matrices for each module will have been made.  Additionally, it is sometimes nice to have gene lists with annotation.
 
-/home/kchilds/scripts/systems_biology/extract_module_level_expression_data_non_rice.pl  -e expression_matrix  -d directory_with_modules.txt_files 
+extract_module_level_expression_data_non_rice.pl  -e expression_matrix  -d directory_with_modules.txt_files 
 
-/home/kchilds/scripts/systems_biology/add_annotation_to_module_lists_not_rice.pl   -a /data/potato/encyclopedia/PGSC_DM_v3.4_gene_func.txt  -d /data/potato/biotic_abiotic/potato_biotic_stress_fpkm_transformed_cv_0.8_20_0.6/ -s module.txt
+add_annotation_to_module_lists_not_rice.pl   -a PGSC_DM_v3.4_gene_func.txt  -d potato_biotic_stress_fpkm_transformed_cv_0.8_20_0.6/ -s module.txt
 
 8. The module-level expression matrix files will be convereted to module-level z-score matrix files.
 
-/home/kchilds/scripts/systems_biology/generate_z_scores_wrapper.pl  -d directory_with_files
+generate_z_scores_wrapper.pl  -d directory_with_files
 
 9. The R script can be used to generate simple trend plots.
 
-/home/kchilds/scripts/systems_biology/write_R_script_for_all_module_trend_plots.pl -d directory_with_z_score_files  -o output_R_script.R
+write_R_script_for_all_module_trend_plots.pl -d directory_with_z_score_files  -o output_R_script.R
 
 10. This R script will actually create the trend plots for all modules from a single experimental analysis.
 
@@ -45,14 +45,14 @@ R CMD BATCH /path/to/R/script/output_R_script.R
 
 11. This script creates higher quality trend plots and outputs them as pdfs which can be further manipulated in Adobe Illustrator.  The script creates four trend plots for each module.  The difference between the trend plots is whether or not they have labels on the x and/or y axes.
 
-R --slave --args  DIRECTORY_WITH_Z_SCORE_FILES    MODULE_COLOR  NUMBER_TREATMENTS  GRAPH_WIDTH_IN_INCHES  LINE_COLOR(gray49)  EXPERIMENT_NAME  Z-LIMIT(2 or 3 or 4) NEGATIVE-Z-LIMIT(-2 or -3 or -4) TREATMENT_LABELS(in quotes, separated by semicolons) < /home/kchilds/scripts/systems_biology/create_trend_plots_with_various_axes.R
+R --slave --args  DIRECTORY_WITH_Z_SCORE_FILES    MODULE_COLOR  NUMBER_TREATMENTS  GRAPH_WIDTH_IN_INCHES  LINE_COLOR(gray49)  EXPERIMENT_NAME  Z-LIMIT(2 or 3 or 4) NEGATIVE-Z-LIMIT(-2 or -3 or -4) TREATMENT_LABELS(in quotes, separated by semicolons) < create_trend_plots_with_various_axes.R
 
 12. Heat maps can be created based on the eigengenes (eigenvectors), but this currently uses R in interactive mode.
 
 library(WGCNA);
 options(stringsAsFactors = FALSE);
 
-lnames = load(file = "/data/potato/encyclopedia/potato_tissues_no_callus_fpkm_transformed_cv_0.8_9_0.7-networkConstruction-auto.RData");
+lnames = load(file = "potato_tissues_no_callus_fpkm_transformed_cv_0.8_9_0.7-networkConstruction-auto.RData");
 
 # By typing "lnames", you will see the component variables of lnames
 lnames
@@ -89,7 +89,7 @@ dev.off()
 library(WGCNA);
 options(stringsAsFactors = FALSE);
 
-lnames = load(file = "/data/potato/encyclopedia/potato_tissues_no_callus_fpkm_transformed_cv_0.8_9_0.7-networkConstruction-auto.RData");
+lnames = load(file = "potato_tissues_no_callus_fpkm_transformed_cv_0.8_9_0.7-networkConstruction-auto.RData");
 
 # Calculate module eigengenes
 # Note that "softPower" is the beta value.
