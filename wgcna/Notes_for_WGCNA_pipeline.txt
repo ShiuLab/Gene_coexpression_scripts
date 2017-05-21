@@ -1,4 +1,4 @@
-
+Codes and pipeline from Dr Kevin Childs MSU, used in this project
 
 
 1. Log2 transform the expression matrix if necessary.
