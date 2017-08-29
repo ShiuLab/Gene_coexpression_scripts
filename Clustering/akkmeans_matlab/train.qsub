@@ -1,0 +1,18 @@
+#!/bin/bash -login
+
+#PBS -l walltime=10:00:00
+
+#PBS -l nodes=1:ppn=4
+
+#PBS -l mem=5gb
+
+#PBS -N train
+### if you are part of the buy in group, please edit the following
+### line with your group id, and uncomment the line
+
+### load necessary modules, e.g.
+module swap MATLAB/R2011b MATLAB/R2013a
+
+cd /mnt/home/uygunsah/4_Plastid/2_Clustering_after_EC/approx_kk/v2/
+
+matlab -nodisplay -r "test"
