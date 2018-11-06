@@ -11,7 +11,7 @@ type = sys.argv[4] #to label your output file
 
 oup=open("commands_kmeans_%s" % type, "w" )
 
-b = [5, 10, 25, 50 ,100, 200, 300, 400, 500, 1000, 2000]
+b = [10, 25, 50 ,100, 200, 300, 400, 500] #can add 5, 2000, 1000
 
 for j in range(1, 11):
     for i in b:
