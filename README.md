@@ -17,15 +17,17 @@ Once you obtain your gene expression matrix
 
       1. Normalize expression matrix: all values are normalized from 0 to 1 per gene
       
-          python normalization.py <expression matrix>
+                  python normalization.py <expression matrix>
   
       2. Combine the expression matrix with each cluster
       
-          python combine_exressionmatrix.py <cluster file> <normalized expression file>
+                  python combine_exressionmatrix.py <cluster file> <normalized expression file>
   
       3. Get visualized expression cluster
       
-          use coexpression_profile_from_cluster_plot_loop.R, input is the output from step 2
+          input is the output from step 2
+          
+                  coexpression_profile_from_cluster_plot_loop.R
       
       
 
