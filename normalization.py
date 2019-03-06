@@ -2,15 +2,16 @@
 import sys
 import pandas as pd
 import numpy as np
-df = pd.read_csv(sys.argv[1], sep='\t', index_col = 0, header=0)
+df = pd.read_csv(sys.argv[1], sep='\t', index_col = 0, header=None)
 
 #normalize values and write
 def normalize_values(lista):
     #gene = lista[0]
     newlist=[]
     data= lista
+    #print(data)
     datafl=[]
-    datafl = data[np.logical_not(np.isnan(data))] # remove NA's to get floats and min/max
+    datafl = data[np.logical_not(pd.isnull(data))] # remove NA's to get floats and min/max
     if len(datafl) > 0: #check list is not empty
         datafl=np.array(datafl, dtype=np.float32) #convert to float in numpy
         mindata= np.amin(datafl)
@@ -52,15 +53,17 @@ df = df.replace("",np.nan)
 col_list= list(df.columns.values)
 
 #loop through file
-rows_to_norm = df.index.values.tolist()
-cols_to_norm = list(df)
+rows_to_norm = df.index[1:].values.tolist()
 
+#rows_to_norm = df.loc[1:,].tolist()
+cols_to_norm = list(df)
+#print(rows_to_norm)
 #df[rows_to_norm] = df[rows_to_norm, ].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 #print(df.loc[rows_to_norm,:])
 
 newdf= df.loc[rows_to_norm,:].apply(normalize_values, axis=1, result_type= 'expand')
 
-print(newdf)
+#print(newdf)
 newdf.columns = col_list
 print(newdf)
 
