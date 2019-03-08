@@ -2,8 +2,8 @@
 import sys
 import pandas as pd
 import numpy as np
-df = pd.read_csv(sys.argv[1], sep='\t', index_col = 0, header=None)
-
+df = pd.read_csv(sys.argv[1], sep='\t', index_col = 0, header=None) #dataframe to normalize
+direct= str(sys.argv[2]) #by row or col
 #normalize values and write
 def normalize_values(lista):
     #gene = lista[0]
@@ -50,21 +50,29 @@ df = df.replace("?",np.nan)
 df = df.replace("NA",np.nan)
 df = df.replace("",np.nan)   
 
-col_list= list(df.columns.values)
+#column names as list
+#cols_list= list(df.columns.values)
+cols_list= list(df[:1])
+#get columns to normalize
+cols_to_norm= list(df.columns[1:].values)
 
-#loop through file
+#get rows to normalize
 rows_to_norm = df.index[1:].values.tolist()
 
 #rows_to_norm = df.loc[1:,].tolist()
-cols_to_norm = list(df)
+#cols_to_norm = list(df)
 #print(rows_to_norm)
 #df[rows_to_norm] = df[rows_to_norm, ].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 #print(df.loc[rows_to_norm,:])
 
-newdf= df.loc[rows_to_norm,:].apply(normalize_values, axis=1, result_type= 'expand')
+if direct == "row":
+    newdf= df.loc[rows_to_norm,:].apply(normalize_values, axis=1, result_type= 'expand')
+elif direct == "col":
+    newdf= df.loc[rows_to_norm,:].apply(normalize_values, axis=0, result_type= 'expand')
+else:
+    print("Need second argument: row = normalize rows, col = normalize by column")
 
-#print(newdf)
-newdf.columns = col_list
+newdf.columns = cols_list
 print(newdf)
-
+print(cols_to_norm, cols_list)
 newdf.to_csv(path_or_buf=str(sys.argv[1])+'_norm.txt', sep="\t", header=True)       
