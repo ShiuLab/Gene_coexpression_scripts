@@ -17,7 +17,7 @@ Once you obtain your gene expression matrix
 
       1. Normalize expression matrix: all values are normalized from 0 to 1 per gene
       
-                  python normalization.py <expression matrix>
+                  python normalization.py <expression matrix> <row or col>
   
       2. Combine the expression matrix with each cluster
       
@@ -25,7 +25,7 @@ Once you obtain your gene expression matrix
   
       3. Get visualized expression cluster
       
-          input is the output from step 2
+          input is the output from step 2. This script is meant to run locally on your computer.
           
                   coexpression_profile_from_cluster_plot_loop.R
       
