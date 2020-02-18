@@ -11,7 +11,7 @@ import random
 from scipy.stats.stats import pearsonr
 from scipy.stats.stats import pearsonr
 from scipy import stats
-from scipy.stats import chi2.sf
+from scipy.stats import chi2
 
 file = sys.argv[1]
 SAVE = '/mnt/scratch/john3784/SP/Spearman_' + file
