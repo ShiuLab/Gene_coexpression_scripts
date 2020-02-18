@@ -11,7 +11,7 @@ import numpy as np
 import random
 from scipy.stats.stats import pearsonr
 from scipy import stats
-from scipy.stats import chisqprob
+from scipy.stats import chi2.sf
 
 file = sys.argv[1]
 SAVE = '/mnt/scratch/john3784/PCC/PCC_' + file
