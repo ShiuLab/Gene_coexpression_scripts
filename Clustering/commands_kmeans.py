@@ -11,13 +11,13 @@ type = sys.argv[4] #to label your output file
 
 oup=open("commands_kmeans_%s" % type, "w" )
 
-b = [10, 25, 50 ,100, 200, 300, 400, 500] #can add 5, 2000, 1000
+b = [250, 300, 400, 500, 750, 1000] #can add 5, 2000, 1000
 
 for j in range(1, 11):
     for i in b:
         k = int(i)
         output_file2 = output_file+"k"+str(k)+ "_%s" % type+ "_run%i" % j
-        oup.write("R --vanilla --slave --args\t%s\t%i\t%s\t%s\t<\tkmeans.R\n" %(expression_data, k, path, output_file2))
+        oup.write("R --vanilla --slave --args %s %i %s %s < kmeans.R\n" %(expression_data, k, path, output_file2))
 oup.close()
 
 '''
