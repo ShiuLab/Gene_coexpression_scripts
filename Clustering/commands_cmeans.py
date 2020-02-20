@@ -20,13 +20,13 @@ type = sys.argv[4]
 oup=open("commands_cmeans_%s" % type, "w" )
 
 
-b = [5, 10, 25, 50 ,100, 200, 300, 400, 500, 1000, 2000]
+b = [250, 300, 400, 500, 750, 1000]
 
 for j in range(1, 11):
     for i in b:
         k = int(i)
         output_file2 = output_file+"c"+str(k)+ "_%s" % type+ "_run%i" % j
-        oup.write("R --vanilla --slave --args\t%s\t%i\t%s\t%s\t<\t/mnt/home/uygunsah/2_Network/9_Kmeans_update_root/cmeans.R\n" %(expression_data, k, path, output_file2))
+        oup.write("R --vanilla --slave --args %s %i %s %s < cmeans.R\n" %(expression_data, k, path, output_file2))
 oup.close()
 
 '''
