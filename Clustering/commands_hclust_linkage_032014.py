@@ -28,7 +28,7 @@ for i in b:
     for j in list:
         k = int(i)
         output_file2 = output_file+"h"+str(k)+ "_%s_%s" % (type, j)
-        oup.write("R --vanilla --slave --args\t%s\t%i\t%s\t%s\t%s\t<\t/mnt/home/uygunsah/6_Codes/R_scripts/hclust_031314.R\n" %(expression_data, k, j, path, output_file2))
+        oup.write("R --vanilla --slave --args %s %i %s %s %s < /mnt/home/uygunsah/6_Codes/R_scripts/hclust_031314.R\n" %(expression_data, k, j, path, output_file2))
 oup.close()
 
 '''
