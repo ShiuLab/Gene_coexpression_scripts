@@ -22,7 +22,7 @@ type = sys.argv[4]
 oup=open("commands_hclust_%s" % type, "w" )
 
 #b = [100]
-b = [5, 10, 25, 50 ,100, 200, 300, 400, 500, 1000, 2000]
+b = [250, 300, 400, 500, 750, 1000]
 list= ["complete", "average" , "ward"]
 for i in b:
     for j in list:
